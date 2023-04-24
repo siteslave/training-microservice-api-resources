@@ -10,7 +10,7 @@ export default async (fastify: FastifyInstance) => {
   const userModel = new UserModel();
   const db: Knex = fastify.db;
 
-  fastify.get('/resources/list', {
+  fastify.get('/list', {
     config: {
       rateLimit: {
         max: 10,
@@ -38,16 +38,16 @@ export default async (fastify: FastifyInstance) => {
       reply
         .status(200)
         .send({ ok: true, users })
-    } catch (error) {
+    } catch (error: any) {
       request.log.error(error);
       reply
         .status(500)
-        .send({ ok: false, error: "Database connection failed." })
+        .send({ ok: false, error: error.message })
     }
 
   })
 
-  fastify.get('/resources/info', {
+  fastify.get('/info', {
     config: {
       rateLimit: {
         max: 10,
