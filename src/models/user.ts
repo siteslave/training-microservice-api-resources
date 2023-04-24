@@ -4,12 +4,12 @@ export class UserModel {
 
   constructor () { }
 
-  create(db: Knex, data: any) {
-    return db('users').insert(data)
-  }
-
   read(db: Knex) {
     return db('users').orderBy('first_name', 'desc')
+  }
+
+  info(db: Knex, userId: any) {
+    return db('users').where('user_id', userId).first()
   }
 
   search(db: Knex, query: string) {

@@ -73,6 +73,10 @@ app.register(require('./plugins/jwt'), {
   }
 })
 
+app.register(require('fastify-axios'), {
+  timeout: 60000
+})
+
 // routes
 app.register(require("./routes/health_check"), { prefix: '/health-check' })
 app.register(require("./routes/welcome"), { prefix: '/' })
