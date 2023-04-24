@@ -8,13 +8,7 @@ RUN apk update && \
   apk upgrade && \
   apk add --no-cache \
   python3 \
-  tzdata \
-  build-base \
-  libtool \
-  autoconf \
-  automake \
-  g++ \
-  make && \
+  tzdata && \
   cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime && \
   echo "Asia/Bangkok" > /etc/timezone
 
@@ -39,7 +33,7 @@ ENV NODE_ENV === 'production'
 
 COPY --from=build /home/api /home/api
 
-EXPOSE 3000
+EXPOSE 3003
 
 # CMD ["node", "/home/api/dist/server.js"]
 CMD ["pm2-runtime", "--json", "/home/api/process.json"]
