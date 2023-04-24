@@ -5,7 +5,9 @@ export class UserModel {
   constructor () { }
 
   read(db: Knex) {
-    return db('users').orderBy('first_name', 'desc')
+    return db('users')
+      .select('user_id', 'first_name', 'last_name')
+      .orderBy('first_name', 'desc')
   }
 
   info(db: Knex, userId: any) {
