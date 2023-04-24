@@ -37,6 +37,11 @@ app.register(import('@fastify/rate-limit'), {
   }
 })
 
+app.register(require('@fastify/redis'), {
+  host: process.env.REDIS_HOST || '127.0.0.1',
+  password: process.env.REDIS_PASSWORD || '',
+})
+
 // Database
 app.register(require('./plugins/db'), {
   options: {

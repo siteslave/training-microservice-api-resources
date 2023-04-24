@@ -24,7 +24,6 @@ export default async (fastify: FastifyInstance) => {
 
     try {
       // introspect
-
       const accessToken = request.headers.authorization?.split(' ')[1];
       // Verify token
       const urlIntrospect = process.env.INTROSPECT_ENDPOINT;
@@ -34,10 +33,31 @@ export default async (fastify: FastifyInstance) => {
         }
       });
 
-      const users = await userModel.read(db);
-      reply
-        .status(200)
-        .send({ ok: true, users })
+      const data: any = response.data;
+      const strKey = `USERLIST_${data.userId}`;
+
+      console.log(strKey);
+
+      // check redis
+      const cacheResult: any = await fastify.redis.get(strKey);
+      if (cacheResult) {
+        console.log(cacheResult);
+        const users = JSON.parse(cacheResult);
+        reply
+          .status(200)
+          .headers({ 'x-cache': true })
+          .send({ ok: true, users });
+      } else {
+        const users = await userModel.read(db);
+        const results: any = JSON.stringify(users);
+        // save to redis
+        await fastify.redis.set(strKey, results, 'EX', 1 * 60 * 60);
+        reply
+          .status(200)
+          .headers({ 'x-cache': false })
+          .send({ ok: true, users });
+      }
+
     } catch (error: any) {
       request.log.error(error);
       reply

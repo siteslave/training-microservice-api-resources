@@ -8,6 +8,7 @@ declare module 'fastify' {
     authenticate: any
     axios: AxiosInstance | any
     db: knex | any
+    redis: any
   }
 
   interface FastifyRequest {
