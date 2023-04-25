@@ -35,13 +35,9 @@ export default async (fastify: FastifyInstance) => {
 
       const data: any = response.data;
       const strKey = `USERLIST_${data.userId}`;
-
-      console.log(strKey);
-
       // check redis
       const cacheResult: any = await fastify.redis.get(strKey);
       if (cacheResult) {
-        console.log(cacheResult);
         const users = JSON.parse(cacheResult);
         reply
           .status(200)
